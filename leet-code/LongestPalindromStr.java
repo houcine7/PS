@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class LongestPalindromStr {
 
     public String longestPalindrom(String s) {
@@ -17,7 +19,7 @@ public class LongestPalindromStr {
                 }
             }
         }
-        System.out.println(longestString);
+        // System.out.println(longestString);
         return longestString;
     }
 
@@ -79,6 +81,10 @@ public class LongestPalindromStr {
     public static void main(String[] args) {
 
         LongestPalindromStr lp = new LongestPalindromStr();
+
+        int[] arr = new int[] { 1, 3, 5 };
+
+        Arrays.asList(arr);
 
         System.out.println(lp.longestPalindrome("babadac"));
     }
