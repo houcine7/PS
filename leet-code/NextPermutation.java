@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class NextPermutation {
@@ -93,10 +94,75 @@ public class NextPermutation {
         // printArray(elements);
     }
 
-    public static void main(String[] args) {
-        int[] nums = new int[] { 1, 2, 3 };
+    private static void singlePassApproach(int[] nums) {
 
-        iterartiveGenerator(nums);
+        //
+        if (nums.length <= 1)
+            System.out.println(nums);
+
+        int i = nums.length - 1;
+
+        while (i >= 1 && nums[i] <= nums[i - 1]) {
+            i--;
+        }
+
+        System.out.println(i);
+
+        if (i == 0) {
+            Arrays.sort(nums);
+            printArray(nums);
+
+        } else {
+            int holder = Integer.MAX_VALUE;
+            int index = 0;
+            for (int j = i; j < nums.length; j++) {
+                //
+                if (nums[j] > nums[i - 1] && nums[j] < holder) {
+                    index = j;
+                    holder = nums[j];
+                }
+            }
+            swap(nums, i - 1, index);
+            Arrays.sort(nums, i, nums.length);
+            printArray(nums);
+        }
+    }
+
+    private static void nextPermSPA2(int[] nums) {
+        //
+
+        int i = nums.length - 1;
+
+        while (i >= 1 && nums[i] <= nums[i - 1]) {
+            i--;
+        }
+        System.out.println(i - 1);
+        if (i >= 0) {
+            int j = nums.length - 1;
+            while (nums[j] <= nums[i - 1]) {
+                j--;
+            }
+            swap(nums, i - 1, j);
+        }
+        reRange(nums, i);
+
+    }
+
+    private static void reRange(int[] nums, int start) {
+
+        int i = start, j = nums.length - 1;
+        System.out.println(i + "----" + j);
+        while (i < j) {
+            swap(nums, i, j);
+            i++;
+            j--;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] nums = new int[] { 3, 2, 1 };
+
+        nextPermSPA2(nums);
     }
 
 }
