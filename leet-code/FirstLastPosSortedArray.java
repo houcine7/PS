@@ -59,13 +59,55 @@ public class FirstLastPosSortedArray {
         return result;
     }
 
+    // complexity
+
+    public int[] firstLastPosition2(int[] nums, int target) {
+
+        int start = 0;
+        int end = nums.length - 1;
+        int counter = 0;
+
+        while (start <= end) {
+            System.out.println(start + " " + end);
+            int mid = (end - start) / 2 + start;
+            System.out.println(mid);
+
+            if (nums[mid] == target) {
+                //
+                counter = mid;
+
+                while (mid > 0 && nums[mid - 1] == target) {
+                    mid--;
+                }
+
+                while (counter < end && nums[counter + 1] == target) {
+                    counter++;
+                }
+
+                return new int[] { mid, counter };
+            }
+
+            else if (nums[mid] > target)
+                end = mid - 1;
+            else
+                start = start + 1;
+        }
+
+        return new int[] { -1, -1 };
+    }
+
     public static void main(String[] args) {
         FirstLastPosSortedArray fst = new FirstLastPosSortedArray();
 
         // System.out.println(fst.firstLastPosition(new int[] { 5, 7, 7, 8, 8, 10 },
         // 8));
 
-        System.out.println(fst.findRec(new int[] { 5, 5, 5, 5 }, 0, 3, 5, new ArrayList<>()));
+        // System.out.println(fst.findRec(new int[] { 5, 5, 5, 5 }, 0, 3, 5, new
+        // ArrayList<>()));
+
+        for (int i : fst.firstLastPosition2(new int[] { 5, 5, 5, 5 }, 5)) {
+            System.out.println("index: " + i);
+        }
     }
 
 }
