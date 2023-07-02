@@ -1,5 +1,9 @@
+import java.util.HashSet;
+import java.util.Set;
+
 public class Suduko {
 
+    // iterative approach
     public boolean isSudukoValid(char[][] suduko) {
         // validate the row
 
@@ -13,8 +17,6 @@ public class Suduko {
                 }
             }
         }
-        //
-        // System.out.println("ROWS ARE VALID");
 
         // validate column :
         for (int j = 0; j < 9; j++) {
@@ -28,6 +30,7 @@ public class Suduko {
             }
         }
 
+        // validate each cell in the board
         for (int i = 0; i < 9; i = i + 3) {
             //
             for (int j = 0; j < 9; j = j + 3) {
@@ -53,6 +56,29 @@ public class Suduko {
 
     }
 
+    // using hashset to reduce complexity to O(n^2)
+
+    public boolean isSudukoValid2(char[][] suduko) {
+
+        Set<String> mySet = new HashSet<>();
+
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                char currentNumber = suduko[row][col];
+
+                if (currentNumber != '.') {
+                    if (!mySet.add(currentNumber + " in row " + row) ||
+                            !mySet.add(currentNumber + " in column " + col) ||
+                            !mySet.add(currentNumber + " in cell " + row / 3 + "," + col / 3))
+                        return false;
+                }
+                System.out.println(mySet.toString());
+            }
+        }
+
+        return true;
+    }
+
     public static void main(String[] args) {
         char[] row1 = new char[] { '5', '3', '.', '.', '7', '.', '.', '.', '.' };
         char[] row2 = new char[] { '6', '.', '.', '1', '.', '5', '.', '.', '.' };
@@ -66,7 +92,7 @@ public class Suduko {
 
         Suduko sdk = new Suduko();
 
-        System.out.println(sdk.isSudukoValid(new char[][] { row1, row2, row3, row4, row5, row6, row7, row8, row9 }));
+        System.out.println(sdk.isSudukoValid2(new char[][] { row1, row2, row3, row4, row5, row6, row7, row8, row9 }));
     }
 
 }
