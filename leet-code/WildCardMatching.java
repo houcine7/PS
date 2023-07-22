@@ -53,11 +53,40 @@ public class WildCardMatching {
         return p_pointer == p.length();
     }
 
+    public boolean isMatchImp(String s, String p) {
+
+        int s_curr_index = 0, p_curr_index = 0, starIndex = -1, match = 0;
+
+        while (s_curr_index < s.length()) {
+            System.out.println(s.charAt(s_curr_index));
+            if (p_curr_index < p.length())
+                System.out.println(p.charAt(p_curr_index));
+            if (p_curr_index < p.length()
+                    && (s.charAt(s_curr_index) == p.charAt(p_curr_index) || p.charAt(p_curr_index) == '?')) {
+                s_curr_index++;
+                p_curr_index++;
+            } else if (p_curr_index < p.length() && p.charAt(p_curr_index) == '*') {
+                starIndex = p_curr_index;
+                match = s_curr_index;
+                p_curr_index++;
+            } else if (starIndex != -1) {
+                p_curr_index = starIndex + 1;
+                s_curr_index = ++match;
+            } else
+                return false;
+        }
+
+        while (p_curr_index < p.length() && p.charAt(p_curr_index) == '*') {
+            p_curr_index++;
+        }
+        return p_curr_index == p.length();
+    }
+
     public static void main(String[] args) {
 
         WildCardMatching m = new WildCardMatching();
 
-        System.out.println(m.isMatch2("ab", "**a*"));
+        System.out.println(m.isMatchImp("ab", "*a*c"));
 
     }
 
