@@ -137,7 +137,7 @@ public class NextPermutation {
             i--;
         }
         System.out.println(i - 1);
-        if (i >= 0) {
+        if (i > 0) {
             int j = nums.length - 1;
             while (nums[j] <= nums[i - 1]) {
                 j--;
@@ -151,7 +151,6 @@ public class NextPermutation {
     private static void reRange(int[] nums, int start) {
 
         int i = start, j = nums.length - 1;
-        System.out.println(i + "----" + j);
         while (i < j) {
             swap(nums, i, j);
             i++;
@@ -161,8 +160,10 @@ public class NextPermutation {
 
     public static void main(String[] args) {
         int[] nums = new int[] { 3, 2, 1 };
-
+        System.out.println("yes");
         nextPermSPA2(nums);
+
+        System.out.println(Arrays.toString(nums));
     }
 
 }

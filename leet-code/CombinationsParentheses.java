@@ -3,7 +3,7 @@ import java.util.List;
 
 /*
  *  ((())) => (()()) => (())()=> ()()() => ()(()) ... 
- *  (((()))) =>( () ( () ) ) 
+ *  (((()))) =>( () ( () ) )    
  * 
  */
 
@@ -83,9 +83,28 @@ public class CombinationsParentheses {
 
     }
 
+    private void bTrack(StringBuilder curr, List<String> result, int openBarcket, int closeBarcket, int len) {
+        //
+        if (curr.length() == 2 * len) {
+            result.add(new String(curr));
+        }
+
+        if (openBarcket < len) {
+            curr.append("(");
+            bTrack(curr, result, openBarcket + 1, closeBarcket, len);
+            curr.deleteCharAt(curr.length() - 1);
+        }
+
+        if (closeBarcket < len) {
+            curr.append(")");
+            bTrack(curr, result, openBarcket, closeBarcket + 1, len);
+            curr.deleteCharAt(curr.length() - 1);
+        }
+    }
+
     public static void main(String[] args) {
 
-        System.out.println(possibleCombinations(3));
+        System.out.println(possibleCombinations(5).size());
 
     }
 
