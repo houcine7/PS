@@ -54,6 +54,7 @@ public class Permutation2 {
 
         if (current.size() == nums.length) {
             result.add(new ArrayList<>(current));
+
             return;
         }
 
