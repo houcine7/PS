@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Permutation2 {
 
@@ -32,9 +34,46 @@ public class Permutation2 {
 
     }
 
+    public List<List<Integer>> permutationUnique2(int[] nums) {
+
+        List<List<Integer>> result = new ArrayList<>();
+        Map<Integer, Integer> occurences = new HashMap<>();
+
+        for (int num : nums) {
+            occurences.put(num, occurences.getOrDefault(num, 0) + 1);
+        }
+
+        backTracking(result, occurences, new ArrayList<>(), nums);
+
+        return result;
+
+    }
+
+    private void backTracking(List<List<Integer>> result, Map<Integer, Integer> occurences, ArrayList<Integer> current,
+            int[] nums) {
+
+        if (current.size() == nums.length) {
+            result.add(new ArrayList<>(current));
+            return;
+        }
+
+        for (Map.Entry<Integer, Integer> entry : occurences.entrySet()) {
+            int key = entry.getKey();
+            int value = entry.getValue();
+            if (value != 0) {
+                current.add(key);
+                occurences.put(key, value - 1);
+                backTracking(result, occurences, current, nums);
+                occurences.put(key, value);
+                current.remove(current.size() - 1);
+            }
+        }
+
+    }
+
     public static void main(String[] args) {
         Permutation2 p2 = new Permutation2();
-        System.out.println(p2.permuteUnique(new int[] { 1, 4, 2 }));
+        System.out.println(p2.permutationUnique2(new int[] { 1, 1, 2 }));
     }
 
 }
