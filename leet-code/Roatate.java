@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Roatate {
@@ -57,6 +58,27 @@ public class Roatate {
 
     }
 
+    public static long arrayMnip(List<List<Integer>> queries, int n) {
+        int[] arr = new int[n + 1];
+        for (List<Integer> q : queries) {
+            int start = q.get(0) - 1, end = q.get(1), k = q.get(2);
+            arr[start] += k;
+            arr[end] -= k;
+        }
+
+
+        long max=-1;
+        long running=0;
+        for(int num :arr ){
+            running+=num ;
+            max =Math.max(running,max)
+        }
+
+        Arrays.toString(arr);
+
+        return max;
+    }
+
     public static void main(String[] args) {
         // List<Integer> test = new ArrayList<>();
         // test.add(1);
@@ -66,19 +88,21 @@ public class Roatate {
         // test.add(5);
         // System.out.println(rotateLeft1(4, new ArrayList<>(test)));
 
-        List<String> qStrings = new ArrayList<>();
-        List<String> stringList = new ArrayList<>();
+        // List<String> qStrings = new ArrayList<>();
+        // List<String> stringList = new ArrayList<>();
 
-        qStrings.add("aba");
-        qStrings.add("xzxb");
-        qStrings.add("ab");
+        // qStrings.add("aba");
+        // qStrings.add("xzxb");
+        // qStrings.add("ab");
 
-        stringList.add("aba");
-        stringList.add("baba");
-        stringList.add("aba");
-        stringList.add("xzxb");
+        // stringList.add("aba");
+        // stringList.add("baba");
+        // stringList.add("aba");
+        // stringList.add("xzxb");
 
-        System.out.println(matchingStrings(stringList, qStrings));
+        List<List<Integer>> test = new ArrayList<>();
+
+        // System.out.println(matchingStrings(stringList, qStrings));
 
     }
 
