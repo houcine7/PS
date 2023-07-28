@@ -66,16 +66,13 @@ public class Roatate {
             arr[end] -= k;
         }
 
-
-        long max=-1;
-        long running=0;
-        for(int num :arr ){
-            running+=num ;
-            max =Math.max(running,max)
+        long max = -1;
+        long running = 0;
+        for (int num : arr) {
+            running += num;
+            max = Math.max(running, max);
         }
-
         Arrays.toString(arr);
-
         return max;
     }
 
