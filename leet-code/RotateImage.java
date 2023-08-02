@@ -26,6 +26,38 @@ public class RotateImage {
 
     }
 
+    public static void sol2(int[][] matrix) {
+        int n = matrix.length;
+
+        for (int i = 0; i < n; i++) {
+            int j = 0;
+            int k = n - 1;
+
+            while (j < k) {
+                int holder = matrix[j][i];
+
+                // System.out.println("holder :" + holder);
+                matrix[j][i] = matrix[k][i];
+                matrix[k][i] = holder;
+                // printArray(matrix[j]);
+                j++;
+                k--;
+            }
+        }
+        printArray(matrix[0]);
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+
+                // System.out.println(matrix[i][j]);
+            }
+        }
+
+        // printArray(matrix[0]);
+    }
+
     static void printArray(int[] arr) {
         String str = "";
         for (int i : arr) {
@@ -36,7 +68,7 @@ public class RotateImage {
 
     public static void main(String[] args) {
 
-        rotate(new int[][] { { 5, 1, 9, 11 }, { 2, 4, 8, 10 }, { 13, 3, 6, 7 }, { 15, 14, 12, 16 } });
+        sol2(new int[][] { { 5, 1, 9, 11 }, { 2, 4, 8, 10 }, { 13, 3, 6, 7 }, { 15, 14, 12, 16 } });
 
     }
 }
@@ -47,6 +79,17 @@ public class RotateImage {
  * 9 8 6 12
  * 11 10 7 16
  * 
+ * 
+ * 5 1 9 11
+ * 2 4 8 10
+ * 13 3 6 7
+ * 15 14 12 16
+ * 
+ * 
+ * 15 14 12 16
+ * 13 3 6 7
+ * 2 4 8 10
+ * 5 1 9 11
  * 
  * 
  */
