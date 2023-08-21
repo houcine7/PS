@@ -52,7 +52,7 @@ public class NQueens {
 
     static boolean isValid(char[][] board, int row, int col) {
 
-        // is row and column safe
+        // is row safe
         for (int i = 0; i < row; i++) {
 
             if (board[i][col] == 'Q')
