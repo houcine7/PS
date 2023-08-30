@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -11,6 +12,7 @@ public class WordBreak {
 
     static boolean breakWord(String s, List<String> wordDict) {
 
+        // This has a complexity of (n*3)
         Set<String> words = new HashSet<>(wordDict);
         Queue<Integer> queue = new LinkedList<>();
         boolean[] seen = new boolean[s.length()];
@@ -36,6 +38,62 @@ public class WordBreak {
         return true;
     }
 
+    // with dp approach
+    public static boolean breakWord2(String s, List<String> wordDir) {
+        //
+        int[] mem = new int[s.length()];
+        Arrays.fill(mem, -1);
+        return dp(s, wordDir, mem, s.length() - 1);
+    }
+
+    private static boolean dp(String s, List<String> wordDir, int[] mem, int i) {
+        if (i < 0)
+            return true;
+        if (mem[i] != -1)
+            return mem[i] == 1;
+
+        for (String word : wordDir) {
+
+            if (i - word.length() + 1 < 0) {
+                continue;
+            }
+
+            System.out.println("WORD:" + word);
+            System.out.println(s.substring(i - word.length() + 1, i + 1));
+
+            if (s.substring(i - word.length() + 1, i + 1).equals(word) && dp(s, wordDir, mem, i - word.length())) {
+
+                mem[i] = 1;
+                System.out.println("WORD2:" + word);
+                return true;
+            }
+
+        }
+
+        mem[i] = 0;
+        return false;
+
+    }
+
+    private static boolean wordBreakDp(String s, List<String> wordDict) {
+
+        boolean[] dp = new boolean[s.length()];
+        Set<String> words = new HashSet<>(wordDict);
+
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = 0; j <= i; j++) {
+                if (j == 0 || dp[j - 1]) {
+                    if (words.contains(s.substring(j, i + 1))) {
+                        dp[i] = true;
+                    }
+                }
+
+            }
+        }
+
+        return dp[s.length() - 1];
+    }
+
     public static void main(String[] args) {
 
         List<String> ls = new ArrayList<>();
@@ -44,7 +102,7 @@ public class WordBreak {
         ls.add("ca");
         ls.add("rs");
 
-        System.out.println(breakWord("cars", ls));
+        System.out.println(breakWord2("cars", ls));
     }
 
 }
