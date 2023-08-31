@@ -27,6 +27,11 @@ class KthLargestNumber {
         return kth;
     }
 
+    static int KthLargestNumber0(int[] nums, int k) {
+
+        return 0;
+    }
+
     public static void main(String[] args) {
 
         int[] a = new int[] { 3, 2, 3, 1, 2, 4, 5, 5, 6 };
