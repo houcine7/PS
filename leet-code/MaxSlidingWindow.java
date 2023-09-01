@@ -1,3 +1,4 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +29,7 @@ public class MaxSlidingWindow {
         return r;
     }
 
+    // Using quicksort
     static int[] maxSlidingWindow2(int[] nums, int k) {
 
         int i = 0;
@@ -86,11 +88,45 @@ public class MaxSlidingWindow {
         nums[j] = temp;
     }
 
+    // using deque
+
+    static int[] maxSlidingWindow0(int[] nums, int k) {
+        ArrayDeque<Integer> dq = new ArrayDeque<>();
+        int[] result = new int[nums.length - k + 1];
+        int m = 0;
+        for (int i = 0; i < k; i++) {
+            while (!dq.isEmpty() && nums[i] >= nums[dq.peekLast()]) {
+                dq.removeLast();
+            }
+
+            dq.offer(i);
+        }
+
+        result[m++] = nums[dq.peekFirst()];
+        for (int j = k; j < nums.length; j++) {
+
+            // element OUT OF THE WINDOW
+            if (dq.peekFirst() == j - k) {
+                dq.pollFirst();
+            }
+            System.out.println(j);
+
+            while (!dq.isEmpty() && nums[j] >= nums[dq.peekLast()]) {
+                dq.removeLast();
+            }
+            dq.offer(j);
+
+            result[m++] = nums[dq.peekFirst()];
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
         int[] nums = new int[] { 1, 3, -1, -3, 5, 3, 6, 7 };
 
         quickSort(nums, 0, 2);
-        System.out.println(maxSlidingWindow2(nums, 3));
+        System.out.println(Arrays.toString(maxSlidingWindow0(nums, 3)));
     }
 
 }
