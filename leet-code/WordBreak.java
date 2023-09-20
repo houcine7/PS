@@ -35,7 +35,7 @@ public class WordBreak {
             }
         }
 
-        return true;
+        return seen[s.length()];
     }
 
     // with dp approach

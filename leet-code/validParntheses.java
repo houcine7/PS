@@ -47,6 +47,11 @@ public class validParntheses {
         //
 
         Map<Character, Character> mp = Map.of('{', '}', '[', ']', '(', ')');
+	/*{
+	 * '{':'}',
+	 * '[':']'
+	 * '(':')'
+	 * }*/
         Stack<Character> st = new Stack<>();
         for (char c : s.toCharArray()) {
             if (!mp.containsKey(c)) {
