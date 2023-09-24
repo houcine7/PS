@@ -2,31 +2,6 @@ import java.util.Arrays;
 
 public class ArrNotEqualNeighbors {
 
-    public static int[] rearrangeArray(int[] nums) {
-
-        /*
-         * [0,1,2,3,4]
-         * let's pick the index 2 for example the average
-         * can equal the element in the index if only one neighbor is smaller then the
-         * element
-         * and the other is greater
-         * 1 2 3 4 5 3
-         * 1 4 2 5 3
-         */
-
-        Arrays.sort(nums);
-        int result[] = new int[nums.length];
-        int j = 0;
-        for (int i = 0; i < nums.length; i += 2) {
-            result[i] = nums[j++];
-        }
-
-        for (int i = 1; i < nums.length; i += 2)
-            result[i] = nums[j++];
-
-        return result;
-    }
-
     public static int[] rearrangeArray2(int[] nums) {
 
         Arrays.sort(nums);
@@ -42,10 +17,36 @@ public class ArrNotEqualNeighbors {
         return result;
     }
 
-    public static void main(String[] args) {
-        int[] test_arr = new int[] { 1, 3, 2 };
+    public static int[] rearrangeArray1(int[] nums) {
+        final int n = nums.length;
 
-        System.out.println(Arrays.toString(rearrangeArray(test_arr)));
+        for (int i = 1; i < n - 1; i++) {
+            if (nums[i - 1] + nums[i + 1] == nums[i] * 2) {
+                swap(nums, i, i + 1);
+            }
+            System.out.println(Arrays.toString(nums));
+        }
+
+        for (int i = n - 2; i >= 1; i--) {
+            if (nums[i + 1] + nums[i - 1] == 2 * nums[i]) {
+                swap(nums, i, i - 1);
+            }
+        }
+
+        return nums;
+
+    }
+
+    public static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public static void main(String[] args) {
+        int[] test_arr = new int[] { 6, 2, 0, 9, 7 };
+
+        System.out.println(Arrays.toString(rearrangeArray1(test_arr)));
     }
 
 }
