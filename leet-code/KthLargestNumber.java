@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
@@ -87,7 +89,7 @@ class KthLargestNumber {
     public static void main(String[] args) {
 
         int[] a = new int[] { 3, 2, 3, 1, 2, 4, 5, 5, 6 };
-        System.out.println(KthLargestNumber2(a, 4));
+        System.out.println(quickSelect(Arrays.asList(), 4));
 
     }
 }
