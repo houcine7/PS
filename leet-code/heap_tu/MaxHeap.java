@@ -13,7 +13,6 @@ public class MaxHeap {
         this.arr = new int[maxSize];
     }
 
-    // restoring the max heap property from an index:
     void maxHeapify(int i) {
 
         int leftChildIndex = 2 * i + 1;
@@ -36,7 +35,6 @@ public class MaxHeap {
 
     }
 
-    // remove the max of the heap
     int removeMax() {
 
         if (this.heapSize <= 0) {
@@ -54,10 +52,6 @@ public class MaxHeap {
         return max;
     }
 
-    /*
-     * Increase key so the heap property is valid for the sub-trees
-     * Of I because we increased the value we need to check the parents
-     */
     void increaseKey(int i, int newValue) {
         arr[i] = newValue;
         while (i != 0 && arr[parent(i)] < arr[i]) {
@@ -70,10 +64,6 @@ public class MaxHeap {
     }
 
     void deleteElement(int i) {
-        // arr[i] = arr[this.heapSize - 1];
-        // this.heapSize--;
-        // maxHeapify(i);
-
         increaseKey(i, Integer.MAX_VALUE);
         removeMax();
     }
@@ -118,7 +108,6 @@ public class MaxHeap {
         return this.heapSize;
     }
 
-    // print the heap
     void printHeap() {
         System.out.println(Arrays.toString(arr));
     }
@@ -126,9 +115,6 @@ public class MaxHeap {
     public static void main(String[] args) {
         MaxHeap h = new MaxHeap(15);
 
-        // Asking the user to input the keys:
-        int k, i, n = 6;
-        System.out.println("Entered 6 keys:- 3, 10, 12, 8, 2, 14 \n");
         h.insertKey(3);
         h.insertKey(10);
         h.insertKey(12);
@@ -138,26 +124,16 @@ public class MaxHeap {
 
         h.printHeap();
 
-        // of the heap.
         System.out.println("The current size of the heap is "
                 + h.currSize() + "\n");
-
-        // Printing the root element which is
-        // actually the maximum element.
         System.out.println("The current maximum element is " + h.getMax()
                 + "\n");
-
-        // Deleting key at index 2.
         h.deleteElement(2);
 
         h.printHeap();
 
-        // Printing the size of the heap
-        // after deletion.
         System.out.println("The current size of the heap is "
                 + h.currSize() + "\n");
-
-        // Inserting 2 new keys into the heap.
         h.insertKey(15);
         h.insertKey(5);
         System.out.println("The current size of the heap is "
@@ -167,11 +143,3 @@ public class MaxHeap {
     }
 
 }
-
-/*
- * 2i+1= left_child
- * => what is the parent of 2i+1=k
- * 2i+2=k
- * 2i+2= right_child
- * 
- */
