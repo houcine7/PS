@@ -56,8 +56,42 @@ public class Suduko {
 
     }
 
-    // using hashset to reduce complexity to O(n^2)
+    public boolean isSudkoValid0(char[][] suduko) {
 
+        for (char[] row : suduko) {
+            Set<Character> set = new HashSet<>();
+            for (int i = 0; i < row.length; i++) {
+                if (!set.add(row[i])) {
+                    return false;
+                }
+            }
+        }
+        for (int i = 0; i < suduko.length; i++) {
+            Set<Character> set = new HashSet<>();
+            for (int j = 0; j < suduko[i].length; j++) {
+                if (!set.add(suduko[j][i])) {
+                    return false;
+                }
+            }
+        }
+
+        for (int i = 0; i < 9; i += 3) {
+            for (int j = 0; j < 9; j += 3) {
+                Set<Character> set = new HashSet<>();
+                for (int k = i; k < i + 3; k++) {
+                    for (int k2 = j; k2 < j + 3; k2++) {
+                        if (!set.add(suduko[k][k2])) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    // using hashset to reduce complexity to O(n^2)
     public boolean isSudukoValid2(char[][] suduko) {
 
         Set<String> mySet = new HashSet<>();

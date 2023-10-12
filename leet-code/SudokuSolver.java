@@ -6,75 +6,6 @@ import java.util.Set;
 
 public class SudokuSolver {
 
-    // this method needs to be corrected it doesn't return the expected result
-    // TODO: change the way comparing the possible values of a box
-    public void solveSudoku(char[][] board) {
-        //
-        String values = "123456789";
-        Map<String, ArrayList<Character>> map = new HashMap<>();
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (board[i][j] == '.') {
-                    for (char c : values.toCharArray()) {
-                        board[i][j] = c;
-                        if (isSudukoValid2(board)) {
-
-                            map.putIfAbsent(i + "+" + j, new ArrayList<Character>());
-                            map.getOrDefault(i + "+" + j, new ArrayList<Character>()).add(c);
-                            map.put(i + "+" + j, map.get(i + "+" + j));
-                        }
-                    }
-                    board[i][j] = '.';
-                }
-            }
-        }
-
-        // System.out.println("BOARD:" + board.toString());
-        // System.out.println("MAP :" + map.toString());
-
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (board[i][j] == '.') {
-                    for (String key : map.keySet()) {
-                        //
-                        if (key.startsWith("" + i) || key.endsWith("" + j)
-                                || (Integer.parseInt("" + key.charAt(0)) / 3 == i
-                                        && Integer.parseInt("" + key.charAt(2)) == j)) {
-                            if (map.get(key).size() == 1)
-                                continue; //
-
-                            for (String key2 : map.keySet()) {
-                                if (!key2.equals(key)) {
-                                    if (map.get(key).size() > map.get(key2).size()) {
-                                        //
-                                        map.get(key).removeAll(map.get(key2));
-                                    } else if (map.get(key).size() < map.get(key2).size()) {
-                                        //
-                                        map.get(key2).removeAll(map.get(key));
-                                    }
-                                }
-                            }
-
-                        }
-
-                    }
-                }
-            }
-        }
-
-        System.out.println(map.toString());
-        for (String key : map.keySet()) {
-
-            int row = Integer.parseInt("" + key.charAt(0));
-            int col = Integer.parseInt("" + key.charAt(2));
-
-            board[row][col] = map.get(key).get(0);
-        }
-
-        System.out.println(this.isSudukoValid2(board));
-
-    }
-
     // implement the solution with recursion
     public void solveSudoku1(char[][] board) {
         //
@@ -177,7 +108,9 @@ public class SudokuSolver {
 
         SudokuSolver solver = new SudokuSolver();
 
-        solver.solveSudoku(new char[][] { row1, row2, row3, row4, row5, row6, row7, row8, row9 });
+        solver.solveSudoku1(new char[][] { row1, row2, row3, row4, row5, row6, row7, row8, row9 });
+
+        System.out.println((2 % 3));
     }
 
 }
