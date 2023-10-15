@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class MaxWater {
 
     public static int getMaxWater(int[] height) {
@@ -13,7 +16,8 @@ public class MaxWater {
             }
         }
 
-        System.out.println(maxWater);
+        List<Integer> ls = new ArrayList<>();
+
         return maxWater;
     }
 
