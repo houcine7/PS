@@ -6,28 +6,19 @@ import java.util.Stack;
 
 public class Temperature {
 
-    public class Nam<T extends Naj> {
+    public int[] dailyTemperatures1(int[] temp) {
+        int[] answer = new int[temp.length];
+        Stack<Integer> indexes = new Stack<>();
 
-    }
-
-    public class Naj {
-
-    }
-
-    public int[] dailyTemperatures(int[] temperatures) {
-        int n = temperatures.length;
-        Stack<Integer> st = new Stack<>();
-        int[] ans = new int[n];
-        for (int i = 0; i < n; i++) {
-            while (!st.isEmpty()
-                    && temperatures[i] > temperatures[st.peek()]) {
-                int prev = st.pop();
-                ans[prev] = i - prev;
+        for (int i = 0; i < answer.length; i++) {
+            while (!indexes.isEmpty() && temp[i] > temp[indexes.peek()]) {
+                int firstTempIndex = indexes.pop();
+                answer[firstTempIndex] = i - firstTempIndex;
             }
-            st.add(i);
-        }
 
-        return ans;
+            indexes.add(i); // adding the current index
+        }
+        return answer;
     }
 
     public static void main(String[] args) {

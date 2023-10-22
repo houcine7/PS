@@ -1,36 +1,22 @@
 class Search2DArr {
 
-    public static boolean searchMatrix(int[][] matrix, int target) {
-
-        // if (target < matrix[0][0])
-        // return false;
-        // if (target > matrix[matrix.length - 1])
-
-        int k = 0, l = matrix.length - 1;
-        int possibleRow = Integer.MAX_VALUE;
-        while (k <= l) {
-            int mid = (k + l) / 2;
-            if (matrix[mid][matrix[mid].length - 1] > target) {
-                l = mid - 1;
-                possibleRow = mid;
-            } else if (matrix[mid][matrix[mid].length - 1] < target) {
-                k = mid + 1;
-            } else {
-                return true;
+   //100% beats 
+    public static boolean searchMatrix1(int[][] matrix ,int target){
+        int possibleRow = -1;
+        int len = matrix[0].length;
+        for(int i=0;i<matrix.length;i++){
+            if(matrix[i][len-1] >= target){
+                possibleRow = i;
+                break;
             }
         }
 
-        if (possibleRow == Integer.MAX_VALUE)
-            return false;
-        System.out.println(possibleRow);
+    if(possibleRow ==-1)
+        return false;
 
-        int i = 0, j = matrix[possibleRow].length - 1;
-
-        while (i <= j) {
-            int mid = (i + j) / 2;
-            System.out.println("s" + mid);
-
-            System.out.println("VALUE:" + matrix[possibleRow][mid]);
+    int i=0, j= len-1;
+     while (i <= j) {
+            int mid = i + (j-i) / 2;
             if (matrix[possibleRow][mid] == target)
                 return true;
             else if (matrix[possibleRow][mid] > target) {
@@ -43,6 +29,10 @@ class Search2DArr {
         return false;
     }
 
+
+
+
+
     public static void main(String[] args) {
 
         int[][] test = new int[][] {
@@ -51,7 +41,7 @@ class Search2DArr {
                 { 23, 30, 34, 60 },
         };
 
-        System.out.println(searchMatrix(test, 3));
+        System.out.println(searchMatrix1(test, 3));
 
     }
 
