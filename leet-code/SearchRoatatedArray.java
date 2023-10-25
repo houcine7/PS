@@ -1,7 +1,7 @@
 public class SearchRoatatedArray {
 
     /*
-     * this method has a time complexity of O(n) =O(n) O(log(n)) : so we need to
+     * this method has a time complexity of O(n) =O(n) + O(log(n)) : so we need to
      * improve it
      */
     public int searchInRotatedArray1(int[] nums, int target) {
