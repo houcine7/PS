@@ -1,172 +1,205 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Solution {
 
-    public static String printArrLongList(List<long[]> ls) {
-        String sum = "";
-        for (long[] item : ls) {
-            sum += Arrays.toString(item);
-        }
-        return sum;
+    public static void main(String[] args) throws IOException {
+        System.out.println(problem1("./input.txt"));
+        System.out.println(problem2("./input.txt"));
     }
 
-    public static boolean isLineInfo(String line) {
-        return line.charAt(0) >= 'a' && line.charAt(0) <= 'z';
-    }
+    private static List<Mapping> generateMappings(List<String> input) {
 
-    public static void fillArrWithValues(List<long[]> ls, String line) {
-        String[] mappers = line.split(" ");
-        long[] interval = new long[] { Long.parseLong(mappers[0]), Long.parseLong(mappers[1]),
-                Long.parseLong(mappers[2]) }; // [des_start_range, source_start_range,length]
-        ls.add(interval);
-    }
+        List<Mapping> output = new ArrayList<>();
 
-    public static List<Long> mapper(List<Long> source, List<long[]> dest) {
-        int index = 0;
-        for (long item : source) {
-            for (int i = 0; i < dest.size(); i++) {
-                long[] temp = dest.get(i); // des, source , length
-                // System.out.println(item);
-                if (item >= temp[1] && item <= temp[1] + temp[2]) {
-                    // System.out.println(Arrays.toString(temp));
-                    long diff = item - temp[1];
-                    source.set(index, temp[0] + diff);
-                    break;
-                }
+        output.add(new Mapping());
+
+        int mapIndex = 0;
+        for (int i = 3; i < input.size(); i++) {
+            String current = input.get(i);
+            if (current.isEmpty()) {
+                i++;
+                mapIndex++;
+                output.add(new Mapping());
+            } else {
+                long dest = Long.parseLong(current.split("\s+")[0]);
+                long source = Long.parseLong(current.split("\s+")[1]);
+                long range = Long.parseLong(current.split("\s+")[2]);
+                Mapping cMap = output.get(mapIndex);
+                cMap.addLine(new Line(source, dest, range));
+                // System.out.printf("%d: %d - %d - %d\n", mapIndex, source, dest, range);
             }
-            index++;
         }
-        return source;
+        return output;
     }
 
-    public static long minArr(List<Long> arr) {
-        long min = Integer.MAX_VALUE;
+    private static long problem1(String filename) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            List<String> lines = reader.lines().toList();
 
-        for (long num : arr) {
-            min = Math.min(min, num);
-        }
-        return min;
-    }
+            long[] seeds = Arrays.stream(lines.get(0).split(":")[1].trim().split("\\s+"))
+                    .mapToLong(Long::parseLong).toArray();
+            // System.out.println(Arrays.toString(seeds));
+            List<Mapping> maps = generateMappings(lines);
+            // System.out.println(maps);
 
-    public static void main(String[] args) {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("./input.txt"));
-
-            List<Long> seeds = new ArrayList<>(); // to hold seeds to be planted
-            List<long[]> seeds_to_soil = new ArrayList<>(); // mappers from seeds to soil
-            List<long[]> soils_to_fertilizer = new ArrayList<>(); // mappers from soils to fertilizer
-            List<long[]> fertilizer_to_water = new ArrayList<>(); // mappers from fertilizer to water
-            List<long[]> water_to_light = new ArrayList<>(); // from water to light
-            List<long[]> light_to_temperature = new ArrayList<>(); // from light to temperature
-            List<long[]> temperature_to_humidity = new ArrayList<>();
-            List<long[]> humidity_to_location = new ArrayList<>();
-
-            AtomicInteger indexListToFill = new AtomicInteger(0);
-
-            br.lines().forEach((line) -> {
-                if (line.length() <= 0)
-                    return;
-
-                if (isLineInfo(line)) {
-                    if (indexListToFill.get() == 0) {
-                        indexListToFill.incrementAndGet();
-                    } else {
-                        indexListToFill.incrementAndGet();
-                        return;
-                    }
-                }
-                if (indexListToFill.get() == 1) {
-                    String nums = line.split(": ")[1];
-                    for (String num_item : nums.split(" ")) {
-                        seeds.add(Long.parseLong(num_item));
-                    }
-                    // indexListToFill.incrementAndGet();
-                    System.out.println(indexListToFill.get());
-                } else if (indexListToFill.get() == 2) {
-                    // seeds_to_soil
-                    fillArrWithValues(seeds_to_soil, line);
-                } else if (indexListToFill.get() == 3) {
-                    // soil_to_fertilizer
-                    fillArrWithValues(soils_to_fertilizer, line);
-                } else if (indexListToFill.get() == 4) {
-                    // fertilizer_to_water
-                    fillArrWithValues(fertilizer_to_water, line);
-                } else if (indexListToFill.get() == 5) {
-                    // water_to_light
-                    fillArrWithValues(water_to_light, line);
-                } else if (indexListToFill.get() == 6) {
-                    // light_to_temperature
-                    fillArrWithValues(light_to_temperature, line);
-                } else if (indexListToFill.get() == 7) {
-                    // temperature_to_humidity
-                    fillArrWithValues(temperature_to_humidity, line);
-                } else if (indexListToFill.get() == 8) {
-                    // humidity_location
-                    fillArrWithValues(humidity_to_location, line);
-                }
-
-            });
-
-            System.out.println(seeds);
-            System.out.println(printArrLongList(seeds_to_soil));
-            System.out.println(printArrLongList(soils_to_fertilizer));
-            System.out.println(printArrLongList(fertilizer_to_water));
-            System.out.println(printArrLongList(water_to_light));
-            System.out.println(printArrLongList(light_to_temperature));
-            System.out.println(printArrLongList(temperature_to_humidity));
-            System.out.println(printArrLongList(humidity_to_location));
-
-            List<Long> result = new ArrayList<>(seeds);
-            for (int i = 1; i <= 7; i++) {
-                switch (i) {
-                    case 1:
-                        result = mapper(result, seeds_to_soil);
-                        System.out.println(result);
-                        break;
-                    case 2:
-                        result = mapper(result, soils_to_fertilizer);
-                        System.out.println(result);
-                        break;
-                    case 3:
-                        result = mapper(result, fertilizer_to_water);
-                        System.out.println(result);
-                        break;
-                    case 4:
-                        result = mapper(result, water_to_light);
-                        System.out.println(result);
-                        break;
-                    case 5:
-                        result = mapper(result, light_to_temperature);
-                        System.out.println(result);
-                        break;
-                    case 6:
-                        result = mapper(result, temperature_to_humidity);
-                        System.out.println(result);
-                        break;
-                    case 7:
-                        result = mapper(result, humidity_to_location);
-                        System.out.println(result);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            System.out.println(minArr(result));
-
-            //
-            br.close();
-
+            return getLowestLoc(seeds, maps);
         } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println(e);
             e.printStackTrace();
+            return 0;
+        }
+    }
 
+    private static long problem2(String filename) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            List<String> lines = reader.lines().toList();
+            long[] seeds = Arrays.stream(lines.get(0).split(":")[1].trim().split("\s+")).mapToLong(Long::parseLong)
+                    .toArray();
+            List<SeedEntry> seedEntries = SeedEntry.fill(seeds);
+            List<Mapping> maps = generateMappings(lines);
+
+            return revFind(seedEntries, maps);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+    }
+
+    private static long getLowestLoc(long[] seeds, List<Mapping> maps) {
+        long lowestLoc = Long.MAX_VALUE;
+        for (long seed : seeds) {
+            // System.out.printf("\n%d\n", seed);
+            long next = seed;
+            for (int i = 0; i < maps.size(); i++) {
+                next = maps.get(i).findMapping(next);
+                // System.out.printf("%d %s\n", next, maps.get(i).toString());
+            }
+            if (next < lowestLoc)
+                lowestLoc = next;
+        }
+        return lowestLoc;
+    }
+
+    private static long revFind(List<SeedEntry> seedEntries, List<Mapping> maps) {
+        long max = maps.get(maps.size() - 1).getMax();
+        // System.out.println(max);
+        for (int i = 0; i < max; i++) {
+            long next = i;
+            long dist = i;
+            for (int j = maps.size() - 1; j >= 0; j--) {
+                next = maps.get(j).findRevMapping(next);
+                // System.out.printf("%d %s\n", next, maps.get(j).toString());
+            }
+            for (SeedEntry seedEntry : seedEntries) {
+                if (seedEntry.partOfLine(next))
+                    return dist;
+            }
+        }
+        return -1;
+    }
+
+    static class SeedEntry {
+        long source;
+        long range;
+
+        public SeedEntry(long source, long range) {
+            this.source = source;
+            this.range = range;
+        }
+
+        boolean partOfLine(long a) {
+            return a >= source && a < source + range;
+        }
+
+        static List<SeedEntry> fill(long[] seeds) {
+            List<SeedEntry> list = new ArrayList<>();
+            for (int i = 0; i + 1 < seeds.length; i += 2) {
+                list.add(new SeedEntry(seeds[i], seeds[i + 1]));
+            }
+            return list;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("[%-%d]", source, range);
+        }
+    }
+
+    static class Line {
+        long source;
+        long dest;
+        long range;
+
+        public Line(long source, long dest, long range) {
+            this.source = source;
+            this.dest = dest;
+            this.range = range;
+        }
+
+        boolean partOfLine(long a) {
+            return a >= source && a < source + range;
+        }
+
+        boolean revPartOfLine(long a) {
+            return a >= dest && a < dest + range;
+        }
+
+        long mapsTo(long a) {
+            long diff = a - source;
+            return dest + diff;
+        }
+
+        long mapsFrom(long a) {
+            long diff = a - dest;
+            return source + diff;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("[%d-%d-%d]", source, dest, range);
+        }
+    }
+
+    static class Mapping {
+
+        List<Line> lines = new ArrayList<>();
+
+        void addLine(Line a) {
+            lines.add(a);
+        }
+
+        long findMapping(long a) {
+            for (Line line : lines) {
+                if (!line.partOfLine(a))
+                    continue;
+                return line.mapsTo(a);
+            }
+            return a;
+        }
+
+        long findRevMapping(long a) {
+            for (Line line : lines) {
+                if (!line.revPartOfLine(a))
+                    continue;
+                return line.mapsFrom(a);
+            }
+            return a;
+        }
+
+        long getMax() {
+            Line temp = lines.stream().max(Comparator.comparing(x -> x.dest + x.range)).get();
+            return temp.dest + temp.range;
+        }
+
+        @Override
+        public String toString() {
+            return lines.toString();
         }
     }
 
