@@ -5,10 +5,40 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Solution {
+
+    static class LoopProcessor implements Callable<Integer> {
+        private final long start;
+        private final long end;
+        private final long intTime;
+        private final long intDis;
+
+        LoopProcessor(long start, long end, long intTime, long intDis) {
+            this.start = start;
+            this.end = end;
+            this.intTime = intTime;
+            this.intDis = intDis;
+        }
+
+        @Override
+        public Integer call() {
+            int count = 0;
+            for (long j = start; j <= end; j++) {
+                long left_ms = intTime - j;
+                long mm_to_pass = left_ms * j;
+
+                if (mm_to_pass > intDis) {
+                    count++;
+                }
+            }
+            return count;
+        }
+    }
 
     public static void main(String[] args) {
         try {
@@ -35,24 +65,20 @@ public class Solution {
             Long intDis = Long.parseLong(dis);
             int total = 0;
 
-            int mid = (int) (intTime / 2);
+            long mid = (intTime / 2);
 
             ExecutorService executor = Executors.newFixedThreadPool(2);
 
-            for (int j = 1; j < intTime; j++) {
-                long left_ms = intTime - j;
-                // System.out.println("LEFT ms: " + left_ms);
-                long mm_to_pass = left_ms * j;
+            Future<Integer> future1 = executor.submit(new LoopProcessor(1, mid, intTime, intDis));
+            Future<Integer> future2 = executor.submit(new LoopProcessor(mid + 1, intTime - 1, intTime, intDis));
 
-                if (mm_to_pass > intDis) {
-                    // System.out.println("DISTANCE : " + intDis);
-                    // System.out.println("MM TO PASS " + mm_to_pass);
-                    // System.out.println("HOLDING MS: " + j);
-                    total++;
-                }
-            }
+            int result1 = future1.get();
+            int result2 = future2.get();
 
-            System.out.println(total);
+            int totalResult = result1 + result2;
+            System.out.println("Total Count: " + totalResult);
+
+            executor.shutdown();
 
         } catch (Exception e) {
             // TODO: handle exception
