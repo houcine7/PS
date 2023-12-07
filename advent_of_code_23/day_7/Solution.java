@@ -3,16 +3,10 @@ package day_7;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.lang.model.type.TypeKind;
-import javax.swing.RowFilter.Entry;
 
 public class Solution {
 
@@ -69,8 +63,17 @@ public class Solution {
                 for (int i = 0; i < this.literal.length(); i++) {
                     char temp1 = this.literal.charAt(i);
                     char temp2 = o.literal.charAt(i);
+
                     if (temp1 == temp2)
                         continue;
+
+                    if (temp1 == 'J') {
+                        return -1;
+                    }
+
+                    if (temp2 == 'J') {
+                        return 1;
+                    }
                     if ((isDigitCard(temp2) && isDigitCard(temp1))) {
                         return temp1 - temp2;
                     }
@@ -86,7 +89,6 @@ public class Solution {
                                 'A', 5,
                                 'K', 4,
                                 'Q', 3,
-                                'J', 2,
                                 'T', 1);
 
                         return temp.get(temp1) - temp.get(temp2);
@@ -103,7 +105,7 @@ public class Solution {
         @Override
         public String toString() {
             // TODO Auto-generated method stub
-            return "Card: " + this.literal + " | " + this.bid + " Type: " + this.type;
+            return "Card: " + this.literal + " Type: " + this.type;
         }
 
     }
@@ -112,6 +114,23 @@ public class Solution {
         Map<Character, Integer> st = new HashMap<>();
         for (char c : hand.toCharArray()) {
             st.put(c, st.getOrDefault(c, 0) + 1);
+        }
+        int jokerCount = st.getOrDefault('J', 0);
+        if (jokerCount >= 1 && jokerCount < 5) {
+            System.out.println(hand);
+            st.remove('J');
+            int max = Integer.MIN_VALUE;
+            char maxKey = ' ';
+            for (Map.Entry<Character, Integer> entry : st.entrySet()) {
+                if (entry.getValue() > max) {
+                    max = entry.getValue();
+                    maxKey = entry.getKey();
+                }
+
+            }
+
+            st.put(maxKey, max + jokerCount);
+            System.out.println("Map after: " + st);
         }
 
         switch (st.size()) {
@@ -155,6 +174,7 @@ public class Solution {
             }
 
             Collections.sort(cards);
+            System.out.println(cards);
             int total = 0;
             int index = 1;
             for (Card card : cards) {
