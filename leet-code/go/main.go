@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type ListNode struct {
 	Val  int
 	Next *ListNode
@@ -9,7 +11,7 @@ type ListNode struct {
 func (l *ListNode) String() string {
 	var result string
 	for l != nil {
-		result += "${l.val}->"
+		result += fmt.Sprintf("%d -> ", l.Val)
 		l = l.Next
 	}
 	return result
@@ -74,33 +76,63 @@ func mergeTwoSortedArr(list1 *ListNode, list2 *ListNode) *ListNode {
 }
 
 func reorderList(list *ListNode) *ListNode {
-	var arr []int = []int{}
+	var arr = []*ListNode{}
 	temp := list
-	var i int = 0
+
 	for temp != nil {
-		arr = append(arr, list.Val)
+		arr = append(arr, temp)
 		temp = temp.Next
-		i++
 	}
 
-	var dummy *ListNode = &ListNode{Val: -1}
+	fmt.Println("the temp array : ", arr)
 
-	result := dummy
+	for start := 1; true; start++ {
+		k := start
+		v := len(arr) - start
 
-	var l, r int = 0, len(arr) - 1
-
-	for l < r {
-		left_node := &ListNode{
-			Val: arr[l],
-			Next: &ListNode{
-				Val: arr[r],
-			},
+		if k >= v {
+			break
 		}
-		result.Next = left_node
-		result = left_node
+
+		arr[k-1].Next = arr[v]
+		arr[v].Next = arr[k]
 	}
 
-	return dummy.Next
+	arr[len(arr)/2].Next = nil
+
+	return list
+
+}
+
+func inplaceReordering(head *ListNode) {
+	fast, slow, temp := head, head, head
+
+	for fast.Next != nil && fast.Next.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+
+	curr := slow
+	var prev *ListNode = nil
+
+	for curr != nil {
+		tmp := curr.Next
+		curr.Next = prev
+		prev = curr
+		curr = tmp
+	}
+
+	p, q := temp, prev
+
+	for temp != nil && prev != nil {
+		p = p.Next
+		q = q.Next
+		temp.Next = prev
+		prev.Next = p
+
+		temp = p
+		prev = q
+	}
 }
 
 // test
@@ -119,10 +151,8 @@ func main() {
 		},
 	}
 
-	list1 = reversListNode(list1)
-	list2 = reversListNode(list2)
-
 	result := mergeTwoSortedArr(list1, list2)
-	result = reversListNode(result)
+	fmt.Println(result)
+	result = reorderList(result)
 	println(result.String())
 }
